@@ -1,0 +1,171 @@
+﻿<div class="container">
+    <input type="text" class="form-control" name="txtsearch" value="" placeholder="Search" [(ngModel)]="txtsearch" /><br />
+    <button *ngIf="role!='admin'" class="btn btn-primary" data-toggle="modal" data-target="#addEditModal" (click)="reset(addEditForm.value)">Add New</button>
+    <div class="clearfix">&nbsp;</div>
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th (click)="sortby('FirstName')">FirstName <i class="fa" [ngClass]="{'fa-sort': column != 'FirstName', 'fa-sort-asc': (column == 'FirstName' && isDesc), 'fa-sort-desc': (column == 'FirstName' && !isDesc) }" aria-hidden="true"> </i></th>
+                <th (click)="sortby('LastName')">LastName <i class="fa" [ngClass]="{'fa-sort': column != 'LastName', 'fa-sort-asc': (column == 'LastName' && isDesc), 'fa-sort-desc': (column == 'LastName' && !isDesc) }" aria-hidden="true"> </i></th>
+                <th (click)="sortby('EmailId')">EmailId <i class="fa" [ngClass]="{'fa-sort': column != 'EmailId', 'fa-sort-asc': (column == 'EmailId' && isDesc), 'fa-sort-desc': (column == 'EmailId' && !isDesc) }" aria-hidden="true"> </i></th>
+                <th (click)="sortby('PhoneNo')">PhoneNo <i class="fa" [ngClass]="{'fa-sort': column != 'PhoneNo', 'fa-sort-asc': (column == 'PhoneNo' && isDesc), 'fa-sort-desc': (column == 'PhoneNo' && !isDesc) }" aria-hidden="true"> </i></th>
+                <th (click)="sortby('Address1')">Address1 <i class="fa" [ngClass]="{'fa-sort': column != 'Address1', 'fa-sort-asc': (column == 'Address1' && isDesc), 'fa-sort-desc': (column == 'Address1' && !isDesc) }" aria-hidden="true"> </i></th>
+                <th (click)="sortby('Address2')">Address2 <i class="fa" [ngClass]="{'fa-sort': column != 'Address2', 'fa-sort-asc': (column == 'Address2' && isDesc), 'fa-sort-desc': (column == 'Address2' && !isDesc) }" aria-hidden="true"> </i></th>
+                <th (click)="sortby('Street')">Street <i class="fa" [ngClass]="{'fa-sort': column != 'Street', 'fa-sort-asc': (column == 'Street' && isDesc), 'fa-sort-desc': (column == 'Street' && !isDesc) }" aria-hidden="true"> </i></th>
+                <th (click)="sortby('City')">City <i class="fa" [ngClass]="{'fa-sort': column != 'City', 'fa-sort-asc': (column == 'City' && isDesc), 'fa-sort-desc': (column == 'City' && !isDesc) }" aria-hidden="true"> </i></th>
+                <th (click)="sortby('ZipCode')">ZipCode <i class="fa" [ngClass]="{'fa-sort': column != 'ZipCode', 'fa-sort-asc': (column == 'ZipCode' && isDesc), 'fa-sort-desc': (column == 'ZipCode' && !isDesc) }" aria-hidden="true"> </i></th>
+                <th>IsActive</th>
+                <th (click)="sortby('State.StateName')">State <i class="fa" [ngClass]="{'fa-sort': column != 'State.StateName', 'fa-sort-asc': (column == 'State.StateName' && isDesc), 'fa-sort-desc': (column == 'State.StateName' && !isDesc) }" aria-hidden="true"> </i></th>
+                <th *ngIf="role!='user'" (click)="sortby('Userdetail.UserName')">User <i class="fa" [ngClass]="{'fa-sort': column != 'Userdetail.UserName', 'fa-sort-asc': (column == 'Userdetail.UserName' && isDesc), 'fa-sort-desc': (column == 'Userdetail.UserName' && !isDesc) }" aria-hidden="true"> </i></th>
+                <th *ngIf="role!='admin'"></th>
+                <th *ngIf="role!='admin'"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let address of filteredAddresses | addressfilter:txtsearch | orderBy: {property: column, direction: direction}| paginate: {itemsPerPage: 5, currentPage:page, id: '1'}; let i = index">
+                <td>{{address.FirstName}}</td>  
+                <td>{{address.LastName}}</td>
+                <td>{{address.EmailId}}</td>
+                <td>{{address.PhoneNo}}</td>
+                <td>{{address.Address1}}</td>
+                <td>{{address.Address2}}</td>
+                <td>{{address.Street}}</td>
+                <td>{{address.City}}</td>
+                <td>{{address.ZipCode}}</td>
+                <td>{{address.IsActive}}</td>
+                <td>{{address.State.StateName}}</td>              
+                <td *ngIf="role!='user'">{{address.Userdetail.UserName}}</td>
+                <td *ngIf="role!='admin'"><button type="button" class="btn btn-info" [routerLink]="['/addresses',address.PKAddressId]" data-toggle="modal" data-target="#addEditModal">Edit</button> </td>
+                <td *ngIf="role!='admin'"><button type="button" class="btn btn-danger" [routerLink]="['/addresses',address.PKAddressId]" data-toggle="modal" data-target="#deleteModal">Delete</button> </td>
+            </tr>
+        </tbody>
+    </table>
+    <!-- Paging Starts -->
+    <pagination-controls (pageChange)="page = $event" id="1"
+                         maxSize="5"
+                         directionLinks="true"
+                         autoHide="true">
+    </pagination-controls>
+  
+    <!-- End of paging -->
+
+    <div id="addEditModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add/Edit Addressbook</h4>
+                </div>
+                <div class="modal-body">
+                    <form #addEditForm="ngForm">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" class="form-control" name="firstName" id="firstName" #fName="ngModel" [(ngModel)]="address.FirstName" required maxlength="50" />
+                            <div *ngIf="fName.errors && (fName.dirty|| fName.touched)">
+                                <p *ngIf="fName.errors.required">First name is required</p>
+                                <p *ngIf="fName.errors.maxlength">First name cannot exceed more than length 50</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" class="form-control" name="lastName" id="lastName" #lName="ngModel" [(ngModel)]="address.LastName" required maxlength="50" />
+                            <div *ngIf="lName.errors && (lName.dirty|| lName.touched)">
+                                <p *ngIf="lName.errors.required">Last name is required</p>
+                                <p *ngIf="lName.errors.maxlength">Last name cannot exceed more than length 50</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="emailId">EmailId</label>
+                            <input type="email" class="form-control" name="emailId" id="emailId" #emailId="ngModel" [(ngModel)]="address.EmailId" required maxlength="50" />
+                            <div *ngIf="emailId.errors && (emailId.dirty|| emailId.touched)">
+                                <p *ngIf="emailId.errors.required">Email address is required</p>
+                                <p *ngIf="emailId.errors.pattern">Invalid email address</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phoneNo">PhoneNo</label>
+                            <input type="text" class="form-control" name="phoneNo" id="phoneNo" #phone="ngModel" [(ngModel)]="address.PhoneNo" required maxlength="50" />
+                            <div *ngIf="phone.errors && (phone.dirty|| phone.touched)">
+                                <p *ngIf="phone.errors.required">Phone number is required</p>
+                                <p *ngIf="phone.errors.pattern">Phone number cannont contain characters (a-z,/,_,@, etc..)/p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="address1">Address1</label>
+                            <input type="text" class="form-control" name="address1" id="address1" #addr1="ngModel" [(ngModel)]="address.Address1" required maxlength="100" />
+                            <div *ngIf="addr1.errors && (addr1.dirty|| addr1.touched)">
+                                <p *ngIf="addr1.errors.required">Address1 is required</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="address2">Address2</label>
+                            <input type="text" class="form-control" name="address2" id="address2" #addr2="ngModel" [(ngModel)]="address.Address2" required maxlength="100" />
+                            <div *ngIf="addr2.errors && (addr2.dirty|| addr2.touched)">
+                                <p *ngIf="addr2.errors.required">Address2 is required</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="street">Street</label>
+                            <input type="text" class="form-control" name="street" id="street" #street="ngModel" [(ngModel)]="address.Street" required maxlength="50" />
+                            <div *ngIf="street.errors && (street.dirty|| street.touched)">
+                                <p *ngIf="street.errors.required">Street is required</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" class="form-control" name="city" id="city" #city="ngModel" [(ngModel)]="address.City" required maxlength="50" />
+                            <div *ngIf="city.errors && (city.dirty|| city.touched)">
+                                <p *ngIf="city.errors.required">City is required</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="zipcode">ZipCode</label>
+                            <input type="text" class="form-control" name="zipcode" id="zipcode" #zipcode="ngModel" [(ngModel)]="address.ZipCode" required maxlength="50" />
+                            <div *ngIf="zipcode.errors && (zipcode.dirty|| zipcode.touched)">
+                                <p *ngIf="fName.errors.required">ZipCode is required</p>
+                                <p *ngIf="fName.errors.pattern">ZipCode cannont contain characters (a-z,/,_,@, etc..)</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="active">Active</label>
+                            <input type="checkbox" name="active" id="active" #active="ngModel" [(ngModel)]="address.IsActive" required maxlength="50" />                          
+                        </div>                        
+                        <div class="form-group">
+                            <label for="state">State</label>
+                            <select class="form-control" name="state" id="state" [(ngModel)]="address.FKStateId" required>
+                                <option selected>--Select State--</option>
+                                <option *ngFor="let state of states" value="{{state.PKStateId}}">{{state.StateName}}</option>
+                            </select>
+                        </div>                                              
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-info" (click)="AddAddress()" *ngIf="action=='Add'" [disabled]="!addEditForm.valid" data-dismiss="modal">Add</button>
+                            <button type="submit" class="btn btn-info" (click)="EditAddress()" *ngIf="action=='Edit'" [disabled]="!addEditForm.valid" data-dismiss="modal">Update</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="deleteModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Are you sure want to delete?</h4>
+                </div>
+                <div class="modal-body">
+                    Name: <b>{{address.FirstName}} {{address.LastName}}</b>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" (click)="DeleteAddress(address.PKAddressId)" data-dismiss="modal">Yes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

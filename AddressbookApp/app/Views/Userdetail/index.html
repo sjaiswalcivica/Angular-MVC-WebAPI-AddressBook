@@ -1,0 +1,127 @@
+﻿<div class="container">
+    <input type="text" class="form-control" name="txtsearch" value="" placeholder="search" [(ngModel)]="txtsearch" /><br />
+    <button class="btn btn-primary" data-toggle="modal" data-target="#addEditModal" (click)="reset(addEditForm.value)">Add New</button>
+    <div class="clearfix">&nbsp;</div>
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th (click)="sortby('UserName')">UserName <i class="fa" [ngClass]="{'fa-sort': column != 'UserName', 'fa-sort-asc': (column == 'UserName' && isDesc), 'fa-sort-desc': (column == 'UserName' && !isDesc) }" aria-hidden="true"> </i></th>
+                <th (click)="sortby('Password')">Password <i class="fa" [ngClass]="{'fa-sort': column != 'Password', 'fa-sort-asc': (column == 'Password' && isDesc), 'fa-sort-desc': (column == 'Password' && !isDesc) }" aria-hidden="true"> </i></th>
+                <th (click)="sortby('FirstName')">FirstName <i class="fa" [ngClass]="{'fa-sort': column != 'FirstName', 'fa-sort-asc': (column == 'FirstName' && isDesc), 'fa-sort-desc': (column == 'FirstName' && !isDesc) }" aria-hidden="true"> </i></th>
+                <th (click)="sortby('LastName')">LastName <i class="fa" [ngClass]="{'fa-sort': column != 'LastName', 'fa-sort-asc': (column == 'LastName' && isDesc), 'fa-sort-desc': (column == 'LastName' && !isDesc) }" aria-hidden="true"> </i></th>
+                <th (click)="sortby('EmailId')">EmailId <i class="fa" [ngClass]="{'fa-sort': column != 'EmailId', 'fa-sort-asc': (column == 'EmailId' && isDesc), 'fa-sort-desc': (column == 'EmailId' && !isDesc) }" aria-hidden="true"> </i></th>
+                <th (click)="sortby('PhoneNo')">PhoneNo <i class="fa" [ngClass]="{'fa-sort': column != 'PhoneNo', 'fa-sort-asc': (column == 'PhoneNo' && isDesc), 'fa-sort-desc': (column == 'PhoneNo' && !isDesc) }" aria-hidden="true"> </i></th>               
+                <th>IsActive</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of users | userdetailfilter:txtsearch| orderBy: {property: column, direction: direction}| paginate: {itemsPerPage: 5, currentPage:page, id: '1'}; let i = index">
+                <td>{{user.UserName}}</td>
+                <td>{{user.Password}}</td>
+                <td>{{user.FirstName}}</td>
+                <td>{{user.LastName}}</td>
+                <td>{{user.EmailId}}</td>
+                <td>{{user.PhoneNo}}</td>
+                <td>{{user.IsActive}}</td>                
+                <td><button type="button" class="btn btn-info" [routerLink]="['/users',user.PKUserId]" data-toggle="modal" data-target="#addEditModal">Edit</button> </td>
+                <td><button type="button" class="btn btn-danger" [routerLink]="['/users',user.PKUserId]" data-toggle="modal" data-target="#deleteModal">Delete</button> </td>
+            </tr>
+        </tbody>
+    </table>
+    <pagination-controls (pageChange)="page = $event" id="1"
+                         maxSize="5"
+                         directionLinks="true"
+                         autoHide="true">
+    </pagination-controls>
+    <div id="addEditModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add/Edit User</h4>
+                </div>
+                <div class="modal-body">
+                    <form #addEditForm="ngForm">
+                        <div class="form-group">
+                            <label for="Username">Username</label>
+                            <input type="text" class="form-control" name="Username" id="Username" #uName="ngModel" [(ngModel)]="user.UserName" required maxlength="50" />
+                            <div *ngIf="uName.errors && (uName.dirty|| uName.touched)">
+                                <p *ngIf="uName.errors.required">Username is required</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="pass">Password</label>
+                            <input type="text" class="form-control" name="pass" id="pass" #pass="ngModel" [(ngModel)]="user.Password" required maxlength="50" />
+                            <div *ngIf="pass.errors && (pass.dirty|| pass.touched)">
+                                <p *ngIf="pass.errors.required">Password is required</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" class="form-control" name="firstName" id="firstName" #fName="ngModel" [(ngModel)]="user.FirstName" required maxlength="50" />
+                            <div *ngIf="fName.errors && (fName.dirty|| fName.touched)">
+                                <p *ngIf="fName.errors.required">First name is required</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" class="form-control" name="lastName" id="lastName" #lName="ngModel" [(ngModel)]="user.LastName" required maxlength="50" />
+                            <div *ngIf="lName.errors && (lName.dirty|| lName.touched)">
+                                <p *ngIf="lName.errors.required">Last name is required</p>
+                                <p *ngIf="lName.errors.maxlength">Last name cannot exceed more than length 50</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="emailId">EmailId</label>
+                            <input type="email" class="form-control" name="emailId" id="emailId" #emailId="ngModel" [(ngModel)]="user.EmailId" required maxlength="50" />
+                            <div *ngIf="emailId.errors && (emailId.dirty|| emailId.touched)">
+                                <p *ngIf="emailId.errors.required">Email address is required</p>
+                                <p *ngIf="emailId.errors.pattern">Invalid email address</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phoneNo">PhoneNo</label>
+                            <input type="text" class="form-control" name="phoneNo" id="phoneNo" #phone="ngModel" [(ngModel)]="user.PhoneNo" required maxlength="50" />
+                            <div *ngIf="phone.errors && (phone.dirty|| phone.touched)">
+                                <p *ngIf="phone.errors.required">Phone number is required</p>
+                                <p *ngIf="phone.errors.pattern">Phone number cannont contain characters (a-z,/,_,@, etc..)/p>
+                            </div>
+                        </div>                        
+                        <div class="form-group">
+                            <label for="active">Active</label>
+                            <input type="checkbox" name="active" id="active" #active="ngModel" [(ngModel)]="user.IsActive" required maxlength="50" />
+                        </div>                        
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-info" (click)="AddUser()" *ngIf="action=='Add'" [disabled]="!addEditForm.valid" data-dismiss="modal">Add</button>
+                            <button type="submit" class="btn btn-info" (click)="EditUser()" *ngIf="action=='Edit'" [disabled]="!addEditForm.valid" data-dismiss="modal">Update</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="deleteModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Are you sure want to delete?</h4>
+                </div>
+                <div class="modal-body">
+                    Name: <b>{{user.UserName}}</b>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" (click)="DeleteUser(user.PKUserId)" data-dismiss="modal">Yes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

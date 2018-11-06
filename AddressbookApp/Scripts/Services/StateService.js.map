@@ -1,0 +1,1 @@
+{"version":3,"file":"StateService.js","sourceRoot":"","sources":["../../app/Services/StateService.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;AACA,sCAAqC;AACrC,mDAAkD;AAClD,sCAA0C;AAG1C;IAAkC,gCAAqB;IACnD,sBAAY,IAAU;eAClB,kBAAM,IAAI,EAAE,gBAAgB,CAAC;IACjC,CAAC;IAHQ,YAAY;QADxB,iBAAU,EAAE;yCAES,WAAI;OADb,YAAY,CAIxB;IAAD,mBAAC;CAAA,AAJD,CAAkC,+BAAc,GAI/C;AAJY,oCAAY"}

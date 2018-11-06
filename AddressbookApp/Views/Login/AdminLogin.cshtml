@@ -1,0 +1,37 @@
+﻿
+@{
+    Layout = null;
+    ViewBag.Title = "AdminLogin";
+}
+
+<base href="/admin/" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin</title>
+
+<!-- 1. Load libraries -->
+<!-- Polyfill(s) for older browsers -->
+<link href="/Content/bootstrap.css" rel="stylesheet" />
+<script src="/Scripts/jquery-1.10.2.min.js"></script>
+<script src="/Scripts/bootstrap.min.js"></script>
+<script src="~/node_modules/core-js/client/shim.min.js"></script>
+<script src="~/node_modules/zone.js/dist/zone.js"></script>
+<script src="~/node_modules/systemjs/dist/system.src.js"></script>
+
+<!-- 2. Configure SystemJS -->
+
+<script src="/systemjs.config.js"></script>
+
+<script>
+        System.import('/Scripts/admin.main.js').catch(function (err)
+        {
+            console.error(err);
+        });
+</script>
+<body>
+    <admin>Admin Content....</admin>
+</body>
+@Styles.Render("~/Content/css")
+@Scripts.Render("~/bundles/modernizr")
+
+

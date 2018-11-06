@@ -1,0 +1,1 @@
+{"version":3,"file":"addressbook.routing.js","sourceRoot":"","sources":["../../app/Routings/addressbook.routing.ts"],"names":[],"mappings":";;AAAA,0CAAuD;AAEvD,+EAA6E;AAE7E,IAAM,MAAM,GAAW;IACnB,EAAE,IAAI,EAAE,EAAE,EAAE,SAAS,EAAE,4CAAoB,EAAE;CAChD,CAAA;AAEY,QAAA,QAAQ,GAAwB,qBAAY,CAAC,QAAQ,CAAC,MAAM,CAAC,CAAC"}
